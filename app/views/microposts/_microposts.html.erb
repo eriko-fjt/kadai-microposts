@@ -1,5 +1,9 @@
 <ul class="list-unstyled">
+  
+  <!-- このmicropostsに渡されるのは、usersコントローラのshowアクションの@microposts = @ser.microposts.order(id: :desc).page(params[:page]) -->
+  
   <% microposts.each do |micropost| %>
+  
     <li class="media mb-3">
       <img class="mr-2 rounded" src="<%= gravatar_url(micropost.user, { size: 50 }) %>" alt="">
       <div class="media-body">
@@ -10,16 +14,26 @@
           <p class="mb-0"><%= micropost.content %></p>
         </div>
         
+        <div class="row">
+          <div class="col-sm-3">
+            <%= render 'favorites/favorite_button', micropost: micropost %>
+          </div>
+          <div class="offset-sm-1 col-sm-3">
+            <% if current_user == micropost.user %>
+              <%= link_to 'Delete', micropost, method: :delete, data: { confirm: "You sure?" }, class: 'btn btn-danger btn-sm' %> 
+            <% end %>
+          </div>
+        </div>
+        
         <div>
-          <% if current_user == micropost.user %>
-            <%= link_to "Delete", micropost, method: :delete, data: { confirm: "You sure?" }, class: 'btn btn-danger btn-sm' %>
-          <% end %>
+          
         </div>
         
       </div>
     </li>
+    
   <% end %>
   
   <%= paginate microposts %>
-</ul>
 
+</ul>
